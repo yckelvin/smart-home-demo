@@ -32,13 +32,21 @@ basic.forever(function () {
     } else {
         pins.analogWritePin(AnalogPin.P16, 0)
     }
-    basic.pause(5000)
     rainfall = pins.analogReadPin(AnalogPin.P1)
     microIoT.microIoT_SendMessage(convertToText(rainfall), microIoT.TOPIC.topic_2)
     microIoT.microIoT_showUserText(2, "Rainfall: " + convertToText(rainfall))
-    if (rainfall < 300) {
+    if (rainfall > 400) {
         microIoT.microIoT_ServoRun(microIoT.aServos.S1, 30)
+        basic.showLeds(`
+            # # # # #
+            # . # . #
+            . . . . .
+            # . # . #
+            . . . . .
+            `)
     } else {
         microIoT.microIoT_ServoRun(microIoT.aServos.S1, 0)
+        basic.clearScreen()
     }
+    basic.pause(5000)
 })
