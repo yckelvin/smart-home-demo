@@ -1,34 +1,36 @@
-input.onButtonPressed(Button.A, function () {
-    microIoT.microIoT_ServoRun(microIoT.aServos.S2, 0)
-})
 input.onButtonPressed(Button.AB, function () {
     control.reset()
 })
-input.onButtonPressed(Button.B, function () {
-    microIoT.microIoT_ServoRun(microIoT.aServos.S2, 20)
-})
-let Door = 0
+let distance = 0
+let door_press = 0
 let rainfall = 0
-let light2 = 0
-microIoT.microIoT_ServoRun(microIoT.aServos.S2, 90)
+let light_level = 0
 microIoT.microIoT_initDisplay()
+microIoT.microIoT_ServoRun(microIoT.aServos.S1, 0)
+microIoT.microIoT_ServoRun(microIoT.aServos.S2, 90)
 microIoT.microIoT_showUserText(0, "INIT DEVICE")
-microIoT.microIoT_showUserText(1, "Ready!")
+microIoT.microIoT_showUserText(1, "READY!")
+basic.pause(2000)
+microIoT.microIoT_clear()
 basic.forever(function () {
-    serial.writeLine("")
-    serial.writeNumber(pins.analogReadPin(AnalogPin.P0))
-    light2 = pins.analogReadPin(AnalogPin.P0)
+    light_level = pins.analogReadPin(AnalogPin.P0)
     rainfall = pins.analogReadPin(AnalogPin.P1)
-    Door = pins.digitalReadPin(DigitalPin.P2)
-    microIoT.microIoT_showUserText(1, "Light: " + convertToText(light2))
-    microIoT.microIoT_showUserText(2, "Rainfall: " + convertToText(rainfall))
-    microIoT.microIoT_showUserText(3, "Door Open" + Door)
-    if (light2 > 500) {
+    door_press = pins.digitalReadPin(DigitalPin.P2)
+    distance = sonar.ping(
+    DigitalPin.P13,
+    DigitalPin.P14,
+    PingUnit.Centimeters
+    )
+    microIoT.microIoT_showUserText(0, "Light:      " + convertToText(light_level))
+    microIoT.microIoT_showUserText(1, "Rainfall:   " + convertToText(rainfall))
+    microIoT.microIoT_showUserText(2, "Door Press: " + door_press)
+    microIoT.microIoT_showUserText(3, "Distance:   " + distance)
+    if (light_level > 200) {
         pins.analogWritePin(AnalogPin.P16, 1023)
     } else {
         pins.analogWritePin(AnalogPin.P16, 0)
     }
-    if (Door == 1) {
+    if (door_press == 1) {
         microIoT.microIoT_ServoRun(microIoT.aServos.S2, 0)
         basic.pause(5000)
     } else {
@@ -46,6 +48,11 @@ basic.forever(function () {
     } else {
         microIoT.microIoT_ServoRun(microIoT.aServos.S1, 0)
         basic.clearScreen()
+    }
+    if (distance < 5) {
+        microIoT.microIoT_setIndexColor(PIN.P15, 0, 5, 0xff0000)
+    } else {
+        microIoT.microIoT_ledBlank(PIN.P15)
     }
     basic.pause(1000)
 })
