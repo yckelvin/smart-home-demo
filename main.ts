@@ -18,10 +18,10 @@ let password = "izo1234@"
 let iot_id = "lmZB9bXGR"
 let iot_pwd = "liWfrxXMgz"
 let topic_0 = "qwPmNL37g"
+microIoT.microIoT_initDisplay()
 microIoT.microIoT_ServoRun(microIoT.aServos.S1, 0)
 microIoT.microIoT_ServoRun(microIoT.aServos.S2, 90)
 basic.showNumber(1)
-microIoT.microIoT_initDisplay()
 microIoT.microIoT_showUserText(0, "Device initiated.")
 microIoT.microIoT_WIFI(wifi_name, password)
 microIoT.microIoT_showUserText(1, "Wifi connected.")
