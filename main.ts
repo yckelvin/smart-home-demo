@@ -27,9 +27,9 @@ basic.forever(function () {
         pins.analogWritePin(AnalogPin.P1, 0)
     }
     if (distance < 5) {
-        microIoT.microIoT_ServoRun(microIoT.aServos.S1, 180)
+        microIoT.microIoT_ServoRun(microIoT.aServos.S2, 180)
     } else {
-        microIoT.microIoT_ServoRun(microIoT.aServos.S1, 90)
+        microIoT.microIoT_ServoRun(microIoT.aServos.S2, 90)
     }
     basic.pause(1000)
 })
